@@ -13,12 +13,12 @@ public class Call {
 	private int realPay;
 	private String startAddr;
 	private String startKeyword;
-	private String startX;
-	private String startY;
+	private double startX;
+	private double startY;
 	private String endAddr;
 	private String endKeyword;
-	private String endX;
-	private String endY;
+	private double endX;
+	private double endY;
 	private String callStateCode;
 	private String routeOpt;
 	private String carOpt;

@@ -14,5 +14,7 @@ public class DealReq {
 	private String callCode;
 	private int passengerOffer;
 	private Date limitTime;
+	private int driverOffer;
+	private int starAvg;
 
 }
