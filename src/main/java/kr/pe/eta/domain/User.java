@@ -27,4 +27,12 @@ public class User {
 	private double currentX;
 	private double currentY;
 
+	@Override
+	public String toString() {
+		return "User [userNo=" + userNo + ", name=" + name + ", email=" + email + ", pwd=" + pwd + ", birth=" + birth
+				+ ", gender=" + gender + ", phone=" + phone + ", role=" + role + ", nickName=" + nickName
+				+ ", dealCode=" + dealCode + ", shareCode=" + shareCode + ", blockCode=" + blockCode + ", carOpt="
+				+ carOpt + ", petOpt=" + petOpt + ", carNum=" + carNum + ", bank=" + bank + ", account=" + account
+				+ ", currentX=" + currentX + ", currentY=" + currentY + "]";
+	}
 }

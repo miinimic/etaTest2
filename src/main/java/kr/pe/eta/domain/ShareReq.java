@@ -18,4 +18,12 @@ public class ShareReq {
 	private int maxShareCount;
 	private Date shareDate;
 
+	@Override
+	public String toString() {
+		return "ShareReq [shareReqNo=" + shareReqNo + ", callCode=" + callCode + ", callNo=" + callNo
+				+ ", firstSharePassengerNo=" + firstSharePassengerNo + ", firstShareCount=" + firstShareCount
+				+ ", startShareCount=" + startShareCount + ", maxShareCount=" + maxShareCount + ", shareDate="
+				+ shareDate + "]";
+	}
+
 }

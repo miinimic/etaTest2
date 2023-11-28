@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+<a href="/community/home.jsp">Label</a>
 </body>
 </html>
