@@ -17,4 +17,11 @@ public class DealReq {
 	private int driverOffer;
 	private int starAvg;
 
+	@Override
+	public String toString() {
+		return "DealReq [userNo=" + userNo + ", callNo=" + callNo + ", callCode=" + callCode + ", passengerOffer="
+				+ passengerOffer + ", limitTime=" + limitTime + ", driverOffer=" + driverOffer + ", starAvg=" + starAvg
+				+ "]";
+	}
+
 }
