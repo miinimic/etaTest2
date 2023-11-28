@@ -24,4 +24,13 @@ public class Call {
 	private String carOpt;
 	private boolean petOpt;
 
+	@Override
+	public String toString() {
+		return "Call [callNo=" + callNo + ", callCode=" + callCode + ", userNo=" + userNo + ", realPay=" + realPay
+				+ ", startAddr=" + startAddr + ", startKeyword=" + startKeyword + ", startX=" + startX + ", startY="
+				+ startY + ", endAddr=" + endAddr + ", endKeyword=" + endKeyword + ", endX=" + endX + ", startX="
+				+ startX + ", endY=" + endY + ", callStateCode=" + callStateCode + ", routeOpt=" + routeOpt
+				+ ", carOpt=" + carOpt + ", petOpt=" + petOpt + "]";
+	}
+
 }

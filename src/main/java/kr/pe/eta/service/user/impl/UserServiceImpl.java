@@ -1,12 +1,12 @@
 package kr.pe.eta.service.user.impl;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import kr.pe.eta.service.user.UserDao;
 import kr.pe.eta.service.user.UserService;
 
-@Mapper
+@Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired

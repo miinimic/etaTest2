@@ -17,4 +17,11 @@ public class Report {
 	private int badCallNo;
 	private Date reportDate;
 
+	@Override
+	public String toString() {
+		return "Report [reportNo=" + reportNo + ", reportCategory=" + reportCategory + ", reportDetail=" + reportDetail
+				+ ", reportCode=" + reportCode + ", reportUserNo=" + reportUserNo + ", badCallNo=" + badCallNo
+				+ ", reportDate=" + reportDate + "]";
+	}
+
 }
