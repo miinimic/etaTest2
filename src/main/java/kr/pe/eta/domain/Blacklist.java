@@ -11,4 +11,10 @@ public class Blacklist {
 	private int passengerNo;
 	private boolean blacklistCode;
 
+	@Override
+	public String toString() {
+		return "Blacklist [driverNo=" + driverNo + ", passengerNo=" + passengerNo + ", blacklistCode=" + blacklistCode
+				+ "]";
+	}
+
 }

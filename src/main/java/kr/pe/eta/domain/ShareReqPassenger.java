@@ -10,4 +10,9 @@ public class ShareReqPassenger {
 	private int shareReqNo;
 	private int otherSharePassengerNo;
 
+	@Override
+	public String toString() {
+		return "ShareReqPassenger [shareReqNo=" + shareReqNo + ", otherSharePassengerNo=" + otherSharePassengerNo + "]";
+	}
+
 }
