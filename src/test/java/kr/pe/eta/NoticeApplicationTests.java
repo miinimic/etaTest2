@@ -1,9 +1,5 @@
 package kr.pe.eta;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
@@ -28,11 +24,9 @@ public class NoticeApplicationTests {
 	// @Test
 	public void testAddNotice() throws Exception {
 
-		LocalDate localDate = LocalDate.now();
-		LocalDateTime localDateTime = localDate.atStartOfDay();
-		Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-
-		Notice notice = new Notice("공지사항88", "공지사항88");
+		Notice notice = new Notice();
+		notice.setNoticeDetail("공지사항Generated test");
+		notice.setNoticeTitle("공지사항Generated test");
 
 		System.out.println("////////" + notice);
 
@@ -44,7 +38,7 @@ public class NoticeApplicationTests {
 	// @Test
 	public void testGetNotice() throws Exception {
 
-		int noticeNo = 1020;
+		int noticeNo = 1041;
 
 		// Notice notice = noticeDao.getNotice(noticeNo);
 		Notice notice = noticeService.getNotice(noticeNo);
@@ -67,10 +61,10 @@ public class NoticeApplicationTests {
 
 	// @Test
 	public void testUpdateNotice() throws Exception {
-		Notice notice = new Notice(1021, "test수정3", "test수정3 입니다.");
+		Notice notice = new Notice(1021, "test수정453", "test수정453 입니다.");
 		System.out.println(notice);
 		noticeService.updateNotice(notice);
-		// Assertions.assertEquals(0, noticeDao.updateNotice(notice));
+		Assertions.assertEquals(1, noticeDao.updateNotice(notice));
 	}
 
 	// @Test
