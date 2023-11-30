@@ -5,5 +5,59 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.pe.eta.service.notice.NoticeDao">
-
+	
+	<resultMap id="noticeSelectMap" type="notice">
+		<result property="noticeNo"		column="notice_no"		jdbcType="NUMERIC"/>
+		<result property="noticeTitle"	column="notice_title"	jdbcType="VARCHAR"/>
+		<result property="noticeDate"	column="notice_date"	jdbcType="DATE"/>
+		<result property="noticeDetail"	column="notice_detail"	jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<insert id="addNotice" parameterType="notice">
+		Insert
+		INTO NOTICE (notice_no, notice_title, notice_date, notice_detail) 
+		VALUES (seq_notice_notice_no.NEXTVAL,
+				#{noticeTitle},
+				SYSDATE,
+				#{noticeDetail})
+	</insert>
+	
+	<select id="getNotice" parameterType="int" resultMap="noticeSelectMap">
+		SELECT
+		*
+		FROM NOTICE
+		WHERE NOTICE_NO = #{noticeNo}
+	</select>
+	
+	<select id="getNoticeList" parameterType="search" resultMap="noticeSelectMap">
+		SELECT *
+		  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+		  			FROM	(	SELECT *
+								FROM NOTICE
+								
+								<where>
+								<if test="searchKeyword !='' ">
+				 					notice_title LIKE '%'||#{searchKeyword}||'%'
+								</if>	
+								</where>
+								ORDER BY notice_date ) inner_table
+					WHERE ROWNUM &lt;= #{endRowNum} )
+			WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
+	</select>
+	
+	<update id="updateNotice" parameterType="notice">
+		update notice
+		<set>
+			notice_title = #{noticeTitle},
+			notice_detail = #{noticeDetail}
+		</set>
+		where notice_no = #{noticeNo}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="int">
+		DELETE
+		FROM NOTICE
+		WHERE notice_no = #{noticeNo}
+	</delete>
+	
 </mapper>
