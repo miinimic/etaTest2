@@ -41,7 +41,6 @@
         WHERE users.user_no=#{userNo}
           AND users.user_no=pay.user_no
           AND call.call_no=pay.call_no
-          AND call.call_code='D'
           AND call.call_state_code='운행전';
     </select>
 
@@ -54,7 +53,11 @@
     <delete id="deleteDealReq" parameterType="int">
         DELETE
         FROM deal
-        WHERE driver_no=#{userNo}
+        WHERE call_no=#{callNo}
+        AND call_no IN (SELECT call_no 
+                        FROM call 
+                        WHERE call_state_code='운행전' 
+                        AND call_code='D')
     </delete>
 
     <select id="getDeal" parameterType="int" resultMap="dealreqSelectMap">
@@ -112,5 +115,55 @@
                    AND users.user_no=deal.driver_no
                    AND users.role='driver' ) countTable
     </select>
+    
+    <insert id="addShareReq" parameterType="sharereq">
+        INSERT
+        INTO shares(share_no, other_share_passenger_no, call_no, share_count, start_share_count, max_share_count, share_date, star)
+        VALUES (seq_share_share_no.nextval, NULL, #{callNo}, #{firstShareCount}, #{startShareCount}, #{maxShareCount}, #{shareDate}, 0)
+    </insert>
+
+    <insert id="addShareReqOther" parameterType="sharereq">
+        INSERT
+        INTO shares(share_no, other_share_passenger_no, call_no, share_count, start_share_count, max_share_count, share_date, star)
+        VALUES (seq_share_share_no.nextval, #{firstSharePassengerNo}, #{callNo}, #{firstShareCount}, #{startShareCount}, #{maxShareCount}, #{shareDate}, 0)
+    </insert>
+
+    <delete id="deleteShareReq" parameterType="int">
+        DELETE
+        FROM shares
+        WHERE other_share_passenger_no=#{firstSharePassengerNo}
+    </delete>
+
+    <select id="getShareList" parameterType="map" resultMap="sharereqSelectMap">
+        SELECT *
+        FROM (  SELECT inner_table.* , ROWNUM AS row_seq
+                FROM( SELECT s.other_share_passenger_no, s.call_no, s.share_count, s.start_share_count, s.max_share_count, s.share_date, s.star
+                      FROM call c, shares s, users u
+                      WHERE s.call_no=c.call_no
+                        AND c.call_state_code='운행전'
+                        AND u.user_no=s.other_share_passenger_no ) inner_table
+                WHERE ROWNUM &lt;= #{endRowNum} )
+        WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
+    </select>
+
+    <update id="updateDealCode" parameterType="int">
+        UPDATE users
+        SET deal_code =
+	        CASE
+	            WHEN deal_code = 0 THEN 1
+	            WHEN deal_code = 1 THEN 0
+	        END
+        WHERE user_no = #{userNo}
+    </update>
+
+    <update id="updateShareCode" parameterType="int">
+        UPDATE users
+        SET share_code=
+          CASE
+              WHEN share_code = 0 THEN 1
+              WHEN share_code = 1 THEN 0
+          END
+        WHERE user_no=#{userNo}
+    </update>
 
 </mapper>

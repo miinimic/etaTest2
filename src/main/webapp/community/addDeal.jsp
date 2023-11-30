@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>addReservation</title>
+    <title>addDeal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ///// Bootstrap, jQuery CDN ///// -->
@@ -34,7 +34,7 @@
         $(function() {
             //==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
             $( "button.btn.btn-primary" ).on("click" , function() {
-                fncAddReservationReq();
+                fncAddDealReq();
             });
         });
 
@@ -45,8 +45,8 @@
             });
         });
 
-        function fncAddReservationReq(){
-            $("form").attr("method" , "POST").attr("action" , "/community/addReservationReq").submit();
+        function fncAddDealReq(){
+            $("form").attr("method" , "POST").attr("action" , "/community/addDealReq").submit();
         }
 
     </script>
@@ -54,32 +54,28 @@
 <body>
 <div class="container">
 
-    <h2 class="bg-default text-center">예약배차</h2><br/>
+    <h2 class="bg-default text-center">딜배차</h2><br/>
     <form class="form-horizontal" enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="hidden" class="form-control" id="callCode" name="callCode" value="${call.callCode}">
-            <input type="hidden" class="form-control" id="realPay" name="realPay" value="${call.realPay}">
-            <input type="hidden" class="form-control" id="startAddr" name="startAddr" value="${call.startAddr}">
-            <input type="hidden" class="form-control" id="startKeyword" name="startKeyword" value="${call.startKeyword}">
-            <input type="hidden" class="form-control" id="startX" name="startX" value="${call.startX}">
-            <input type="hidden" class="form-control" id="startY" name="startY" value="${call.startY}">
-            <input type="hidden" class="form-control" id="endAddr" name="endAddr" value="${call.endAddr}">
-            <input type="hidden" class="form-control" id="endKeyword" name="endKeyword" value="${call.endKeyword}">
-            <input type="hidden" class="form-control" id="endX" name="endX" value="${call.endX}">
-            <input type="hidden" class="form-control" id="endY" name="endY" value="${call.endY}">
-        </div>
 
         <div class="form-group">
-            <label for="callDate" class="col-sm-offset-1 col-sm-3 control-label">예약날짜</label>
             <div class="col-sm-4">
-                <input type="date" class="form-control" id="callDate" name="callDate">
+                <input type="hidden" class="form-control" id="callNo" name="callNo" value="${callNo}">
             </div>
         </div>
 
         <div class="form-group">
-            <label for="callTime" class="col-sm-offset-1 col-sm-3 control-label">예약시간</label>
+            <label for="money" class="col-sm-offset-1 col-sm-3 control-label">선결제 금액</label>
             <div class="col-sm-4">
-                <input type="time" class="form-control" id="callTime" name="callTime">
+                <input type="text" class="form-control" id="money" name="money" value="${money}" readonly>
+            </div>
+        </div>
+        
+        <!-- 잔여 tpay rest로 구현 -->
+
+        <div class="form-group">
+            <label for="passengerOffer" class="col-sm-offset-1 col-sm-3 control-label">제시금액</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="passengerOffer" name="passengerOffer">
             </div>
         </div>
 
