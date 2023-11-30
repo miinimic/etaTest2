@@ -88,8 +88,8 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-xs-4 col-md-2"><strong>예약 시간</strong></div>
-        <div class="col-xs-8 col-md-4">${call.callDate}</div>
+        <div class="col-xs-4 col-md-2"><strong>제시 금액</strong></div>
+        <div class="col-xs-8 col-md-4">${dealreq.passengerOffer}</div>
     </div>
     <hr/>
 

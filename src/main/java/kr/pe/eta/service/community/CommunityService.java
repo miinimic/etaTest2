@@ -12,7 +12,9 @@ public interface CommunityService {
 
 	public void addReservation(Call call) throws Exception;
 
-	public int getCallNo(int userNo) throws Exception;
+	public int getCallNo(int userNo, String callCode) throws Exception;
+
+	public Call getCall(int callNo) throws Exception;
 
 	public void addDealReq(DealReq dealReq) throws Exception;
 
