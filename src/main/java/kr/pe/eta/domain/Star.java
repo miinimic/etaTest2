@@ -16,4 +16,10 @@ public class Star {
 	private Date callDate;
 	private int star;
 
+	@Override
+	public String toString() {
+		return "Star [driverNo=" + driverNo + ", passengerNo=" + passengerNo + ", starDate=" + starDate + ", callNo="
+				+ callNo + ", callDate=" + callDate + ", star=" + star + "]";
+	}
+
 }
