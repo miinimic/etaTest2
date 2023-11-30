@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 
 import kr.pe.eta.common.Search;
 import kr.pe.eta.domain.Call;
-import kr.pe.eta.domain.Pay;
+import kr.pe.eta.domain.ShareReqPassenger;
+import kr.pe.eta.domain.User;
 import kr.pe.eta.service.callres.CallResDao;
 import kr.pe.eta.service.callres.CallResService;
 
@@ -30,21 +31,25 @@ public class CallResServiceImpl implements CallResService {
 	}
 
 	@Override
-	public Call getRecord(int callNo) throws Exception {
+	public Call getRecordDriver(int callNo) throws Exception {
 		// TODO Auto-generated method stub
-		return callResDao.getRecord(callNo);
+		return callResDao.getRecordDriver(callNo);
 	}
 
 	@Override
-	public Call getReservation(int callNo) throws Exception {
+	public Call getRecordPassenger(int callNo) throws Exception {
 		// TODO Auto-generated method stub
-		return callResDao.getReservation(callNo);
+		System.out.println("grpSI");
+		System.out.println(callNo);
+		return callResDao.getRecordPassenger(callNo);
 	}
 
 	@Override
 	public Map<String, Object> getRecordList(Search search, int userNo) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println(search);
 		List<Object> list = callResDao.getRecordList(search, userNo);
+		System.out.println(list);
 		int totalCount = callResDao.getTotalCount(search);
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -55,9 +60,9 @@ public class CallResServiceImpl implements CallResService {
 	}
 
 	@Override
-	public Map<String, Object> getReservationList(Search search) throws Exception {
+	public Map<String, Object> getReservationList(Search search, int userNo) throws Exception {
 		// TODO Auto-generated method stub
-		List<Object> list = callResDao.getReservationList(search);
+		List<Object> list = callResDao.getReservationList(search, userNo);
 		int totalCount = callResDao.getTotalCount(search);
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -65,12 +70,6 @@ public class CallResServiceImpl implements CallResService {
 		map.put("totalCount", new Integer(totalCount));
 
 		return map;
-	}
-
-	@Override
-	public void addPay(Pay pay) throws Exception {
-		// TODO Auto-generated method stub
-		callResDao.addPay(pay);
 	}
 
 	@Override
@@ -80,10 +79,18 @@ public class CallResServiceImpl implements CallResService {
 	}
 
 	@Override
+	public void updateMatchDriver(Call call, int driverNo) throws Exception {
+		// TODO Auto-generated method stub
+		callResDao.updateMatchDriver(call, driverNo);
+	}
+
+	@Override
 	public Map<String, Object> getCallResList(Search search) throws Exception {
 		// TODO Auto-generated method stub
 		List<Object> list = callResDao.getCallResList(search);
+		System.out.println(list);
 		int totalCount = callResDao.getTotalCount(search);
+		System.out.println(totalCount);
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
@@ -95,6 +102,28 @@ public class CallResServiceImpl implements CallResService {
 	@Override
 	public void updateEndXY(Call call) throws Exception {
 		callResDao.updateEndXY(call);
+
+	}
+
+	@Override
+	public Call getCallByNo(int callNo) {
+		// TODO Auto-generated method stub
+		return callResDao.getCallByNo(callNo);
+
+	}
+
+	@Override
+	public User getUserByCallNo(int callNo) {
+		// TODO Auto-generated method stub
+		return callResDao.getUserByCallNo(callNo);
+
+	}
+
+	@Override
+	public List<ShareReqPassenger> getSharesByCallNo(int callNo) {
+		List<ShareReqPassenger> sharelist = callResDao.getSharesByCallNo(callNo);
+
+		return sharelist;
 
 	}
 

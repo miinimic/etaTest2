@@ -2,11 +2,15 @@ package kr.pe.eta.domain;
 
 import java.util.Date;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Star {
 
 	private int driverNo;
@@ -15,11 +19,5 @@ public class Star {
 	private int callNo;
 	private Date callDate;
 	private int star;
-
-	@Override
-	public String toString() {
-		return "Star [driverNo=" + driverNo + ", passengerNo=" + passengerNo + ", starDate=" + starDate + ", callNo="
-				+ callNo + ", callDate=" + callDate + ", star=" + star + "]";
-	}
 
 }
