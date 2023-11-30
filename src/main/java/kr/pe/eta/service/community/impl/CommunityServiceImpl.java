@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import kr.pe.eta.common.Search;
 import kr.pe.eta.domain.Call;
 import kr.pe.eta.domain.DealReq;
+import kr.pe.eta.domain.ShareReq;
+import kr.pe.eta.domain.ShareReqPassenger;
 import kr.pe.eta.service.community.CommunityDao;
 import kr.pe.eta.service.community.CommunityService;
 
@@ -45,8 +47,8 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 
 	@Override
-	public void deleteDealReq(int userNo) throws Exception {
-		communityDao.deleteDealReq(userNo);
+	public void deleteDealReq(int callNo) throws Exception {
+		communityDao.deleteDealReq(callNo);
 	}
 
 	@Override
@@ -87,6 +89,47 @@ public class CommunityServiceImpl implements CommunityService {
 		map.put("list", list);
 		map.put("totalCount", totalCount);
 		return map;
+	}
+
+	@Override
+	public void addShareReq(ShareReq shareReq) throws Exception {
+		communityDao.addShareReq(shareReq);
+	}
+
+	@Override
+	public void addShareReqOther(ShareReqPassenger shareReqPassenger) throws Exception {
+		communityDao.addShareReqOther(shareReqPassenger);
+	}
+
+	@Override
+	public void deleteShareReq(int userNo) throws Exception {
+		communityDao.deleteShareReq(userNo);
+	}
+
+	@Override
+	public void deleteShareReqOther(int userNo) throws Exception {
+		communityDao.deleteShareReq(userNo);
+	}
+
+	@Override
+	public Map<String, Object> getShareList(Search search) throws Exception {
+		List<DealReq> list = communityDao.getShareList(search);
+
+		int totalCount = communityDao.getTotalCountPass(search);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("totalCount", totalCount);
+		return map;
+	}
+
+	@Override
+	public void updateDealCode(int userNo) throws Exception {
+		communityDao.updateDealCode(userNo);
+	}
+
+	@Override
+	public void updateShareCode(int userNo) throws Exception {
+		communityDao.updateShareCode(userNo);
 	}
 
 }

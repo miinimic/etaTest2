@@ -23,6 +23,7 @@ public class Call {
 	private String routeOpt;
 	private String carOpt;
 	private boolean petOpt;
+	private String callDate;
 
 	@Override
 	public String toString() {
@@ -30,7 +31,7 @@ public class Call {
 				+ ", startAddr=" + startAddr + ", startKeyword=" + startKeyword + ", startX=" + startX + ", startY="
 				+ startY + ", endAddr=" + endAddr + ", endKeyword=" + endKeyword + ", endX=" + endX + ", startX="
 				+ startX + ", endY=" + endY + ", callStateCode=" + callStateCode + ", routeOpt=" + routeOpt
-				+ ", carOpt=" + carOpt + ", petOpt=" + petOpt + "]";
+				+ ", carOpt=" + carOpt + ", petOpt=" + petOpt + ", callDate=" + callDate + "]";
 	}
 
 }
