@@ -52,21 +52,37 @@
     </select>
 
     <insert id="addReservation" parameterType="call">
-        INSERT
-        INTO call(call_no, call_code, call_date, real_pay, start_addr, start_keyword, start_x, start_y, end_addr, end_keyword, end_x, end_y, call_state_code, star)
-        VALUES
-        (seq_call_call_no.NEXTVAL, 'R', TO_DATE(#{callDate}, 'YYYY-MM-DD HH24:MI:SS'), #{realPay}, #{startAddr}, #{startKeyword}, #{startX}, #{startY}, #{endAddr}, #{endKeyword}, #{endX}, #{endY}, '운행전', 5)
-    </insert>
-
-    <select id="getCallNo" parameterType="int" resultType="int">
+			  <![CDATA[
+				  DECLARE
+				    v_call_no NUMBER;
+				  BEGIN
+				    INSERT INTO call 
+				    (call_no, call_code, call_date, real_pay, start_addr, start_keyword, start_x, start_y, end_addr, end_keyword, end_x, end_y, call_state_code, star) 
+				    VALUES 
+				    (seq_call_call_no.NEXTVAL, 'R', TO_DATE(#{callDate}, 'YYYY-MM-DD HH24:MI:SS'), #{realPay:NUMERIC}, #{startAddr:VARCHAR}, #{startKeyword:VARCHAR}, #{startX}, #{startY}, #{endAddr:VARCHAR}, #{endKeyword:VARCHAR}, #{endX}, #{endY}, '운행전', 0)
+				    RETURNING call_no INTO v_call_no;
+				
+				    INSERT INTO match (call_no, passenger_no, driver_no) VALUES (v_call_no, #{userNo:NUMERIC}, NULL);
+				  END;
+			  ]]>
+		</insert>
+		
+    <select id="getCallNo" parameterType="map" resultType="int">
         SELECT call.call_no
         FROM call, users, pay
-        WHERE users.user_no=#{userNo}
-          AND users.user_no=pay.user_no
-          AND call.call_no=pay.call_no
-          AND call.call_state_code='운행전'
+        WHERE users.user_no=#{param.userNo}
+        AND users.user_no=pay.user_no
+        AND call.call_no=pay.call_no
+        AND call.call_state_code='운행전'
+        AND call.call_code=#{param.callCode}
     </select>
 
+    <select id="getCall" parameterType="int" resultMap="callSelectMap">
+        SELECT call_no, call_code, TO_CHAR(call_date, 'YYYY-MM-DD HH24:MI:SS') AS call_date, real_pay, start_keyword, start_x, start_y, end_addr, end_keyword, end_x, end_y, call_state_code, star)
+        FROM call
+        WHERE call_no=#{value}
+    </select>
+    
     <insert id="addDealReq" parameterType="dealreq" >
         INSERT
         INTO deal(deal_no, driver_no, call_no, passenger_offer, driver_offer)

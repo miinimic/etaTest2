@@ -31,9 +31,20 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 
 	@Override
-	public int getCallNo(int userNo) throws Exception {
-		int callNo = communityDao.getCallNo(userNo);
+	public int getCallNo(int userNo, String callCode) throws Exception {
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("userNo", userNo);
+		param.put("callCode", callCode);
+
+		int callNo = communityDao.getCallNo(param);
 		return callNo;
+	}
+
+	@Override
+	public Call getCall(int callNo) throws Exception {
+		Call call = communityDao.getCall(callNo);
+		return call;
 	}
 
 	@Override
