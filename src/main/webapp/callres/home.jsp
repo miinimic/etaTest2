@@ -164,7 +164,7 @@
        	    };
 
        	    // 1초마다 마커를 이동시키기 위한 인터벌 설정
-       	    const intervalId = setInterval(moveMarker, 1000);
+       	    const intervalId = setInterval(1000);
        	};
 
 
@@ -240,12 +240,28 @@
 
 
      </script>
+     
+     <script>
+    function sendRequestP() {
+        window.location.href = '/callres/getRecordPassenger?callNo=1001';
+    }
+    function sendRequestD() {
+        window.location.href = '/callres/getRecordDriver?callNo=1000';
+    }
+    function list() {
+        window.location.href = '/callres/getRecordList';
+    }
+</script>
 
 	 	
 	
 </head>
 	
 <body>
+
+ <button onclick="sendRequestP()">P레코드 조회</button>
+  <button onclick="sendRequestD()">D레코드 조회</button>
+    <button onclick="list()">D레코드 조회</button>
 
 
 
