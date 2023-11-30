@@ -9,6 +9,7 @@ public class Call {
 
 	private int callNo;
 	private String callCode;
+	private String callDate;
 	private int userNo;
 	private int realPay;
 	private String startAddr;
@@ -23,14 +24,15 @@ public class Call {
 	private String routeOpt;
 	private String carOpt;
 	private boolean petOpt;
+	private int star;
 
 	@Override
 	public String toString() {
-		return "Call [callNo=" + callNo + ", callCode=" + callCode + ", userNo=" + userNo + ", realPay=" + realPay
-				+ ", startAddr=" + startAddr + ", startKeyword=" + startKeyword + ", startX=" + startX + ", startY="
-				+ startY + ", endAddr=" + endAddr + ", endKeyword=" + endKeyword + ", endX=" + endX + ", startX="
-				+ startX + ", endY=" + endY + ", callStateCode=" + callStateCode + ", routeOpt=" + routeOpt
-				+ ", carOpt=" + carOpt + ", petOpt=" + petOpt + "]";
+		return "Call [callNo=" + callNo + ", callCode=" + callCode + ", callDate = " + callDate + ", userNo = " + userNo
+				+ ", realPay=" + realPay + ", startAddr=" + startAddr + ", startKeyword=" + startKeyword + ", startX="
+				+ startX + ", startY=" + startY + ", endAddr=" + endAddr + ", endKeyword=" + endKeyword + ", endX="
+				+ endX + ", startX=" + startX + ", endY=" + endY + ", callStateCode=" + callStateCode + ", routeOpt="
+				+ routeOpt + ", carOpt=" + carOpt + ", petOpt=" + petOpt + ", star = " + star + "]";
 	}
 
 }
