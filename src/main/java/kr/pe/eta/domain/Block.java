@@ -2,11 +2,15 @@ package kr.pe.eta.domain;
 
 import java.util.Date;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Block {
 
 	private int userNo;
@@ -14,11 +18,5 @@ public class Block {
 	private Date blockDate;
 	private Date unblockDate;
 	private int blockOpt;
-
-	@Override
-	public String toString() {
-		return "Block [userNo=" + userNo + ", blockCode=" + blockCode + ", blockDate=" + blockDate + ", unblockDate="
-				+ unblockDate + ", blockOpt=" + blockOpt + "]";
-	}
 
 }
