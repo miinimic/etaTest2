@@ -5,5 +5,154 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.pe.eta.service.feedback.FeedbackDao">
+	<resultMap id="starSelectMap" type="star">
+		<result property="callNo"			column="call_no"			jdbcType="NUMERIC" />
+		<result property="callDate"			column="call_date"			jdbcType="DATE" />
+		<result property="stars"			column="star"				jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<resultMap id="blacklistSelectMap" type="blacklist">
+		<result property="driverNo"			column="DRIVER_NO"			jdbcType="NUMERIC" />
+		<result property="passengerNo"		column="PASSENGER_NO"		jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<resultMap id="reportSelectMap" type="report">
+		<result property="reportNo"			column="REPORT_NO"			jdbcType="NUMERIC" />
+		<result property="reportUserNo"		column="REPORT_USER_NO"		jdbcType="NUMERIC"/>
+		<result property="badCallNo"		column="BAD_CALL_NO"		jdbcType="NUMERIC"/>
+		<result property="reportCategory"	column="REPORT_CATEGORY"	jdbcType="VARCHAR"/>
+		<result property="reportCode"		column="REPORT_CODE"		jdbcType="NUMERIC"/>
+		<result property="reportDetail"		column="REPORT_DETAIL"		jdbcType="VARCHAR"/>
+		<result property="reportDate"		column="REPORT_DATE"		jdbcType="DATE"/>
+		<result property="reportRole"		column="ROLE"				jdbcType="VARCHAR"/>
+		<result property="regDate"			column="REG_DATE"			jdbcType="DATE"/>
+		<result property="badUserNo" 		column="USER_NO"			jdbcType="NUMERIC"/>
+	</resultMap>
+	<resultMap id="callSelectMap" type="call">
+		<result property="callNo"			column="call_no"			jdbcType="NUMERIC" />
+		<result property="callCode"			column="call_code"			jdbcType="VARCHAR"/>
+		<result property="realPay"			column="real_pay"			jdbcType="NUMERIC"/>
+		<result property="startAddr"		column="start_addr"			jdbcType="VARCHAR"/>
+		<result property="startKeyword"		column="start_keyword"		jdbcType="VARCHAR"/>
+		<result property="startX"			column="start_x"			jdbcType="NUMERIC"/>
+		<result property="startY"			column="start_y"			jdbcType="NUMERIC"/>
+		<result property="endAddr"			column="end_addr"			jdbcType="VARCHAR"/>
+		<result property="endKeyword"		column="end_keyword"		jdbcType="VARCHAR"/>
+		<result property="endX"				column="end_x"				jdbcType="NUMERIC"/>
+		<result property="endY"				column="end_y"				jdbcType="NUMERIC"/>
+		<result property="callStateCode"	column="call_state_code"	jdbcType="VARCHAR"/>
+		<result property="callDate"			column="call_date"			jdbcType="DATE"/>
+		
+	</resultMap>
 
+	<update id="updateStar" parameterType="star">
+		UPDATE CALL
+			set STAR = #{star}
+		WHERE CALL_NO = #{callNo}
+	</update>
+	
+	<select id="getStar" parameterType="star">
+		select star
+		from call
+		where call_no = #{callNo}
+	</select>
+	
+	<select id="getShareStar" parameterType="star" resultMap="starSelectMap">
+		select star 
+		from shares 
+		where call_no = #{callNo}
+		and OTHER_SHARE_PASSENGER_NO = #{passengerNo}
+	</select>
+	
+	<insert id="addBlacklist" parameterType="blacklist">
+		INSERT
+		INTO BLACKLIST
+		VALUES (seq_blacklist_blacklist_no.nextval,
+				#{driverNo},
+				#{passengerNo})
+	</insert>
+	
+	<delete id="deleteBlacklist" parameterType="blacklist">
+		DELETE
+		FROM BLACKLIST
+		WHERE DRIVER_NO = #{driverNo}
+		AND PASSENGER_NO = #{passengerNo}
+	</delete>
+	
+	<select id="getBlacklist" parameterType="blacklist" resultMap="blacklistSelectMap">
+		SELECT *
+		FROM BLACKLIST
+		WHERE DRIVER_NO = #{driverNo}
+		AND PASSENGER_NO = #{passengerNo}
+	</select>
+	
+	<insert id="addReport" parameterType="report">
+		INSERT
+		INTO report 
+		(report_no, report_user_no,bad_call_no,report_category,report_code,report_detail,role,reg_date)
+		VALUES (
+		seq_report_report_no.nextval,
+		#{reportUserNo}, 
+		#{badCallNo},
+		#{reportCategory},
+		0,
+		#{reportDetail},
+		#{role},
+		sysdate)
+	</insert>
+	
+	<select id="getReport" parameterType="int" resultMap="reportSelectMap">
+		select 
+		r.report_no as report_no, 
+		r.report_user_no as report_user_no,
+		r.bad_call_no as bad_call_no,
+		r.report_category as report_category,
+		r.report_code as report_code, 
+		r.report_detail as report_detail,
+		r.report_date as report_date,
+		r.role as role,
+		r.reg_date as reg_date,
+		p.user_no as USER_NO
+		from report r,  pay p
+		where r.bad_call_no = p.call_no
+		and r.bad_call_no = #{badCallNo}
+		and p.pay_type = 2
+		and r.report_no = #{reportNo}
+		<if test="reportRole == 'passenger'">
+		and p.role = 'driver'
+		</if>
+		<if test="reportRole == 'driver'">
+		and p.role = 'passenger'
+		</if>
+	</select>
+	
+	<select  id="getReportList"  parameterType="search"	resultMap="reportSelectMap">
+	  	SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  			FROM	(	SELECT *
+							FROM REPORT
+							<if test="searchCondition != null">
+							<where>
+								<if test="searchCondition == 0 and searchKeyword !='' ">
+					 				REPORT_CODE = #{searchKeyword}
+								</if>
+								<if test="searchCondition == 1 and searchKeyword !='' ">
+					 				AND REPORT_CATEGORY = #{searchKeyword}
+								</if>
+								<if test="searchCondition == 2 and searchKeyword !='' ">
+					 				AND REPORT_USER_NO like #{searchKeyword}||'%'
+								</if>
+							</where>
+							</if>
+							ORDER BY REG_DATE ) inner_table
+		WHERE ROWNUM &lt;= #{endRowNum} )
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+	 </select>
+	 
+	 <select id="getCall" parameterType="int" resultMap="callSelectMap">
+		SELECT *
+		FROM CALL
+		WHERE CALL_NO = #{CallNo}
+	</select>
 </mapper>
+

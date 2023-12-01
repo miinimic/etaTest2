@@ -2,11 +2,15 @@ package kr.pe.eta.domain;
 
 import java.util.Date;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Report {
 
 	private int reportNo;
@@ -15,13 +19,9 @@ public class Report {
 	private boolean reportCode;
 	private int reportUserNo;
 	private int badCallNo;
+	private int badUserNo;
 	private Date reportDate;
-
-	@Override
-	public String toString() {
-		return "Report [reportNo=" + reportNo + ", reportCategory=" + reportCategory + ", reportDetail=" + reportDetail
-				+ ", reportCode=" + reportCode + ", reportUserNo=" + reportUserNo + ", badCallNo=" + badCallNo
-				+ ", reportDate=" + reportDate + "]";
-	}
+	private String reportRole;
+	private Date regDate;
 
 }
