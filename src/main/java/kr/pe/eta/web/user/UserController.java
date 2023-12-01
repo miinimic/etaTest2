@@ -50,24 +50,17 @@ public class UserController {
 
 		System.out.println("/user/login : POST");
 		ModelAndView modelAndView = new ModelAndView();
-		User db = userService.getUser(user.getUserNo());
+		System.out.println("user" + user);
+		User db = userService.getUser(user.getEmail());
 
 		System.out.println(db);
 		System.out.println("code" + db.isBlockCode());
 
-		if (user.getPwd().equals(db.getPwd()) && user.getEmail().equals(db.getEmail()) && user.isBlockCode() == false) {
+		if (user.getPwd().equals(db.getPwd()) && user.isBlockCode() == false) {
 			session.setAttribute("user", db);
-		}
-		if (user.isBlockCode() == true) {
-			// feedback.updateCode(user.isBlockCode());
-			User codeUser = userService.getUser(user.getUserNo());
-			if (codeUser.isBlockCode() == false) {
-				session.setAttribute("user", codeUser);
-			}
 		}
 
 		modelAndView.setViewName("redirect:/home.jsp");
-		modelAndView.addObject("user", db);
 		return modelAndView;
 	}
 
@@ -97,11 +90,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "getUser", method = RequestMethod.GET)
-	public ModelAndView getUser() throws Exception {
+	public ModelAndView getUser(@RequestParam("email") String eamil) throws Exception {
 		System.out.println("/user/getUser : POST");
 		ModelAndView model = new ModelAndView();
 
-		User user = userService.getUser(1011);
+		User user = userService.getUser(eamil);
 
 		model.setViewName("forward:/home.jsp");
 		model.addObject("user", user);
@@ -110,11 +103,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "updateUser", method = RequestMethod.GET)
-	public ModelAndView updateUserView(@RequestParam("userNo") int userNo, HttpSession session) throws Exception {
+	public ModelAndView updateUserView(@RequestParam("email") String eamil, HttpSession session) throws Exception {
 		System.out.println("/user/updateUser : POST");
 		ModelAndView model = new ModelAndView();
 
-		User User = userService.getUser(userNo);
+		User User = userService.getUser(eamil);
 
 		model.setViewName("forward:/user/updateUserView.jsp");
 		model.addObject("user", User);
@@ -139,11 +132,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "updatePwd", method = RequestMethod.GET)
-	public ModelAndView updatePwdView(@RequestParam("userNo") int userNo, HttpSession session) throws Exception {
+	public ModelAndView updatePwdView(@RequestParam("email") String eamil, HttpSession session) throws Exception {
 		System.out.println("/user/updatePwd : POST");
 		ModelAndView model = new ModelAndView();
 
-		User user = userService.getUser(userNo);
+		User user = userService.getUser(eamil);
 
 		model.setViewName("forward:/user/updatePwd.jsp");
 		model.addObject("user", user);
