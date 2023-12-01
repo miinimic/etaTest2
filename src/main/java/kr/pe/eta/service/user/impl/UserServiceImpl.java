@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(int userNo) throws Exception {
+	public User getUser(String email) throws Exception {
 
-		return userDao.getUser(userNo);
+		return userDao.getUser(email);
 	}
 
 	@Override
@@ -63,11 +63,11 @@ public class UserServiceImpl implements UserService {
 	public boolean dupEmail(String eamil) throws Exception {
 		boolean result = true;
 		User user = userDao.getEmail(eamil);
-		// 중복이면 false
+
+		// 중복이 false
 		if (user != null) {
 			result = false;
 		}
-
 		return result;
 	}
 
@@ -75,24 +75,35 @@ public class UserServiceImpl implements UserService {
 	public boolean dupNickname(String nickName) throws Exception {
 		boolean result = true;
 		User user = userDao.getNickName(nickName);
-		// 중복이면 false
+
+		// 중복이 false
 		if (user != null) {
 			result = false;
 		}
-
 		return result;
 	}
 
 	@Override
 	public Map<String, Object> autoUserList(Search search) throws Exception {
 		List<User> list = userDao.getUserList(search);
-		int totalPassenger = userDao.getPassengerCount(search);
-		int totalDriver = userDao.getDriverCount(search);
+		int drivertotalCount = userDao.getDriverCount(search);
+		int passengertotalCount = userDao.getPassengerCount(search);
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
-		map.put("totalPassenger", totalPassenger);
-		map.put("totalDriver", totalDriver);
+		map.put("drivertotalCount", new Integer(drivertotalCount));
+		map.put("passengertotalCount", new Integer(passengertotalCount));
 
 		return map;
 	}
+
+	public int getPassengerCount(Search search) throws Exception {
+		return userDao.getPassengerCount(search);
+	}
+
+	public int getDriverCount(Search search) throws Exception {
+		return userDao.getDriverCount(search);
+
+	}
+
 }
