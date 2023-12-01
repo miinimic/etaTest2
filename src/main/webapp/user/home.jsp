@@ -8,5 +8,12 @@
 </head>
 <body>
 
+<form id="login" method="post" action="/user/login">
+<input id ="email" type="text" name="email" value=""><br>
+<input id ="pwd" type="text" name="pwd" value=''>
+<input id="submit" type="submit" name="submit" value="Enter"/>
+<!-- <a href="/user/logon">Label</a> -->
+
+</form>
 </body>
 </html>
