@@ -31,6 +31,8 @@ public interface FeedbackDao {
 
 	public List<Report> getReport(Report report) throws Exception;
 
+	// public List<Report> getShareReport(Report report) throws Exception;
+
 	public List<Report> getReportList(Search search) throws Exception;
 
 }

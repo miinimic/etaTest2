@@ -73,6 +73,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 		return map;
 	}
 
+//	public Map<String, Object> getShareReport(Report report) throws Exception {
+//		List<Report> reportlist = feedbackDao.getShareReport(report);
+//
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("reportlist", reportlist);
+//		return map;
+//	}
+
 	public Map<String, Object> getReportList(Search search) throws Exception {
 
 		List<Report> reportlist = feedbackDao.getReportList(search);

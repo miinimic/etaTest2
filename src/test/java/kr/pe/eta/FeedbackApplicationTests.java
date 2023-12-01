@@ -124,19 +124,19 @@ public class FeedbackApplicationTests {
 
 	}
 
-	// @Test
-	public void testAddReport() throws Exception {
-
-		Report report = Report.builder().reportUserNo(1023).badCallNo(1000).reportCategory("요금 관련")
-				.reportDetail("passenger가 driver신고5").role("passenger").build();
-//		Assertions.assertEquals(1, feedbackService.addReport(report));
-		assert 1 == feedbackService.addReport(report);
-
-	}
+//	// @Test
+//	public void testAddReport() throws Exception {
+//
+//		Report report = Report.builder().reportUserNo(1023).badCallNo(1000).reportCategory("요금 관련")
+//				.reportDetail("passenger가 driver신고5").role("passenger").build();
+////		Assertions.assertEquals(1, feedbackService.addReport(report));
+//		assert 1 == feedbackService.addReport(report);
+//
+//	}
 
 	@Test
 	public void testGetReport() throws Exception {
-		Report report = Report.builder().role("passenger").reportNo(1012).badCallNo(1000).build();
+		Report report = Report.builder().reportRole("driver").reportNo(1022).badCallNo(1001).build();
 		// report = feedbackService.getReport(report.getReportNo());
 		Map<String, Object> reportlist = feedbackService.getReport(report);
 		System.out.println(reportlist);
