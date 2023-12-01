@@ -6,4 +6,79 @@
 
 <mapper namespace="kr.pe.eta.service.callreq.CallReqDao">
 
+  <resultMap id="callReqSelectMap" type="call">
+    <result property="callNo"       column="call_no"       jdbcType="NUMERIC"/>
+    <result property="callCode" column="call_code"    jdbcType="VARCHAR" />
+    <result property="callDate" column="call_date"    jdbcType="DATE" />
+    <result property="realPay"         column="real_pay"          jdbcType="NUMERIC" />
+    <result property="startAddr"         column="start_addr"          jdbcType="VARCHAR" />
+    <result property="startKeyword"       column="start_keyword"    jdbcType="VARCHAR" />
+    <result property="startX"        column="start_x"           jdbcType="NUMERIC" />
+    <result property="startY"        column="start_y"           jdbcType="NUMERIC" />
+    <result property="endAddr"     column="end_addr"       jdbcType="VARCHAR" />
+    <result property="endKeyword"     column="end_keyword"       jdbcType="VARCHAR" />
+    <result property="endX"     column="end_x"      jdbcType="NUMERIC" />
+    <result property="endY"     column="end_y"      jdbcType="NUMERIC" />
+    <result property="callStateCode"     column="call_state_code"      jdbcType="VARCHAR" />
+    <result property="star"     column="star"      jdbcType="NUMERIC" />
+  </resultMap>
+  
+  <resultMap type="Like" id="LikeSelectMap">
+      <result property="likeNo"        column="LIKE_NO"       jdbcType="NUMERIC"/>
+      <result property="userNo"   column="USER_NO"      jdbcType="NUMERIC"/>
+      <result property="likeName"   column="LIKE_NAME"      jdbcType="VARCHAR"/>
+      <result property="likeAddr"     column="LIKE_ADDR"     jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <select id="getEndAddrList" parameterType="int" resultMap="callReqSelectMap">
+       SELECT * FROM call
+       WHERE call_no IN (SELECT call_no FROM match WHERE passenger_no = #{userNo:NUMERIC} AND call_state_code = '운행완료')
+       ORDER BY call_date DESC
+  </select>
+  
+    <select id="getLikeList" parameterType="int" resultMap="LikeSelectMap">
+       SELECT * FROM likes WHERE user_no = #{userNo:NUMERIC}
+  </select>
+
+   <insert  id="addLikeList"    parameterType="int" >
+     <![CDATA[
+     BEGIN             
+      INSERT INTO likes (like_no, user_no, like_name, like_addr) VALUES (1000, #{userNo:NUMERIC}, '집', null);
+      INSERT INTO likes (like_no, user_no, like_name, like_addr) VALUES (1001, #{userNo:NUMERIC}, '회사', null);
+      INSERT INTO likes (like_no, user_no, like_name, like_addr) VALUES (1002, #{userNo:NUMERIC}, null, null);      
+     END;
+    ]]>
+   </insert>
+   
+<insert id="addCall" parameterType="Call">
+  <![CDATA[
+  DECLARE
+    v_call_no NUMBER;
+  BEGIN
+    INSERT INTO call 
+    (call_no, call_code, call_date, real_pay, start_addr, start_keyword, start_x, start_y, end_addr, end_keyword, end_x, end_y, call_state_code, star) 
+    VALUES 
+    (seq_call_call_no.NEXTVAL, #{callCode:VARCHAR}, SYSDATE, #{realPay:NUMERIC}, #{startAddr:VARCHAR}, #{startKeyword:VARCHAR}, 0.0, 0.0, #{endAddr:VARCHAR}, #{endKeyword:VARCHAR}, 0.0, 0.0, '운행전', 0)
+    RETURNING call_no INTO v_call_no;
+
+    INSERT INTO match (call_no, passenger_no, driver_no) VALUES (v_call_no, #{userNo:NUMERIC}, 1002);
+  END;
+  ]]>
+</insert>
+
+  <select id="getCallNo" resultType="int">
+       SELECT seq_call_call_no.CURRVAL FROM dual
+  </select>
+        
+  <delete  id="deleteCall"  parameterType="int" >
+    <![CDATA[
+    BEGIN
+       DELETE FROM match
+       WHERE call_no = #{callNo:NUMERIC};
+       
+       DELETE FROM call
+       WHERE call_no = #{callNo:NUMERIC};
+    END;
+    ]]>
+  </delete>
 </mapper>

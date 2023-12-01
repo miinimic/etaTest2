@@ -15,4 +15,10 @@ public class Pay {
 	private Date payDate;
 	private int money;
 
+	@Override
+	public String toString() {
+		return "Pay [userNo=" + userNo + ", callNo=" + callNo + ", payCode=" + payCode + ", payDate=" + payDate
+				+ ", money=" + money + "]";
+	}
+
 }

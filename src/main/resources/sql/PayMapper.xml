@@ -6,4 +6,8 @@
 
 <mapper namespace="kr.pe.eta.service.pay.PayDao">
 
+  <select id="getMyMoney" parameterType="int" resultType="int">
+       SELECT my_money FROM users WHERE user_no=#{userNo:NUMERIC}
+  </select>
+
 </mapper>
