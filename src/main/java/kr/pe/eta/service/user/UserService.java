@@ -11,7 +11,7 @@ public interface UserService {
 	public User addUser(User user) throws Exception;
 
 	// 내정보확인
-	public User getUser(int userNo) throws Exception;
+	public User getUser(String email) throws Exception;
 
 	// 회원리스트
 	public Map<String, Object> getUserList(Search search) throws Exception;

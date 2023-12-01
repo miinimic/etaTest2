@@ -22,11 +22,12 @@ public interface UserDao {
 
 	public User updatePwd(String pwd) throws Exception;
 
-	public User getUser(int userNo) throws Exception;
+	public User getUser(String email) throws Exception;
 
 	public User deleteUser(int userNo) throws Exception;
 
 	public int getPassengerCount(Search search) throws Exception;
 
 	public int getDriverCount(Search search) throws Exception;
+
 }
