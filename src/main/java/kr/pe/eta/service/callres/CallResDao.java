@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.pe.eta.common.Search;
+import kr.pe.eta.domain.Blacklist;
 import kr.pe.eta.domain.Call;
 import kr.pe.eta.domain.ShareReqPassenger;
 import kr.pe.eta.domain.User;
@@ -27,12 +28,19 @@ public interface CallResDao {
 
 	public int getTotalCount(Search search) throws Exception;
 
-	public void updateMatchDriver(Call call, int driverNo) throws Exception;
+	public void updateMatchDriver(int callNo, int driverNo) throws Exception;
 
 	public Call getCallByNo(int callNo);
 
-	public User getUserByCallNo(int callNo);
+	public User getUserByCallNop(int callNo);
 
-	public List<ShareReqPassenger> getSharesByCallNo(int callNo);
+	public List<ShareReqPassenger> getSharesByCallNop(int callNo);
 
+	public User getUserByCallNod(int callNo);
+
+	public int getMatchByCallnod(int callNo);
+
+	public List<ShareReqPassenger> getSharesByCallNod(int callNo);
+
+	public Blacklist getBlacklistByCallNod(int callNo);
 }
