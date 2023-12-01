@@ -11,18 +11,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<div class="mt-5 row">
-${2 + 2}
 
-			<c:forEach var="item" items="${list}" varStatus="status">
-				
-				
-						<div class="product-content">
-						
-							<p>가격: ${item.callNo}</p>
-							
-						</div>
-
-			</c:forEach>
 </body>
 </html>
