@@ -15,8 +15,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 	
 	<!-- Bootstrap Dropdown Hover CSS -->
-   <link href="/css/animate.min.css" rel="stylesheet">
-   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
    
 	
 	<!--  CSS 추가 : 툴바에 화면 가리는 현상 해결 :  주석처리 전, 후 확인-->
@@ -164,7 +162,7 @@
        	    };
 
        	    // 1초마다 마커를 이동시키기 위한 인터벌 설정
-       	    const intervalId = setInterval(moveMarker, 1000);
+       	    const intervalId = setInterval(1000);
        	};
 
 
@@ -240,12 +238,32 @@
 
 
      </script>
+     
+     <script>
+    function sendRequestP() {
+        window.location.href = '/callres/getRecordPassenger?callNo=1001';
+    }
+    function sendRequestD() {
+        window.location.href = '/callres/getRecordDriver?callNo=1000';
+    }
+    function list() {
+        window.location.href = '/callres/getRecordList';
+    }
+    function callAccept() {
+        window.location.href = '/callres/callAccept?callNo=1004';
+    }
+</script>
 
 	 	
 	
 </head>
 	
 <body>
+
+ <button onclick="sendRequestP()">P레코드 조회</button>
+  <button onclick="sendRequestD()">D레코드 조회</button>
+    <button onclick="list()">list조회</button>
+     <button onclick="callAccept()">수락</button>
 
 
 

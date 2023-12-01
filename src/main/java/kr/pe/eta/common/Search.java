@@ -8,6 +8,7 @@ public class Search {
 	private int pageSize;
 	private int endRowNum;
 	private int startRowNum;
+	private boolean code;
 
 	// Constructor
 	public Search() {
@@ -44,6 +45,14 @@ public class Search {
 
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	public boolean isCode() {
+		return code;
+	}
+
+	public void setCode(boolean code) {
+		this.code = code;
 	}
 
 	public int getEndRowNum() {

@@ -2,11 +2,15 @@ package kr.pe.eta.domain;
 
 import java.util.Date;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Notice {
 
 	private int noticeNo;
@@ -20,14 +24,10 @@ public class Notice {
 //		this.noticeDetail = noticeDetail;
 //	}
 
-	public Notice(int noticeNo, String noticeTitle, String noticeDetail) {
-		this.noticeNo = noticeNo;
-		this.noticeTitle = noticeTitle;
-		this.noticeDetail = noticeDetail;
-	}
+//	public Notice(int noticeNo, String noticeTitle, String noticeDetail) {
+//		this.noticeNo = noticeNo;
+//		this.noticeTitle = noticeTitle;
+//		this.noticeDetail = noticeDetail;
+//	}
 
-	public String toString() {
-		return "Notice : [noticeNo] " + noticeNo + " [noticeDate] " + noticeDate + " [noticeTitle] " + noticeTitle
-				+ " [noticeDetail] " + noticeDetail;
-	}
 }
