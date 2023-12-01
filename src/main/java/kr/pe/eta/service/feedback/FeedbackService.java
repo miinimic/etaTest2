@@ -29,6 +29,8 @@ public interface FeedbackService {
 
 	public Map<String, Object> getReport(Report report) throws Exception;
 
+//	public Map<String, Object> getShareReport(Report report) throws Exception;
+
 	public Map<String, Object> getReportList(Search search) throws Exception;
 
 }
