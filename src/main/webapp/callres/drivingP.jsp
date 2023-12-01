@@ -17,12 +17,10 @@
     <div class="col-md-6">
         <div id="map" style="width:100%;height:710px;"></div>
     </div>
-     <button id="endTripButton">운행 종료</button>
+   
 
     <script>
-    document.getElementById('endTripButton').addEventListener('click', function() {
-        sendLocationDataToServer();
-    });
+    
     
     
     var mapContainer = document.getElementById('map'),
@@ -33,10 +31,9 @@
 
     var map = new kakao.maps.Map(mapContainer, mapOption);
     var marker = new kakao.maps.Marker({map: map}); // 전역 스코프에서 마커 정의
-	var userId = 'user01';
+	var passengerNo = '1003';//세션에서 처리되어야될 값
     var stompClient = null;
-    var firstLocation = null;
-    var lastLocation = null;
+    
 
     function connect() {
         var socket = new SockJS('/ws');
@@ -45,15 +42,10 @@
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
 
-            stompClient.subscribe('/topic/location/' + userId, function (message) {
+            stompClient.subscribe('/topic/location/' + passengerNo, function (message) {
                 var locationData = JSON.parse(message.body);
-                console.log("Received location for " + userId + ": ", locationData.lat, locationData.lng);
-                if (!firstLocation) {
-                    firstLocation = locationData;
-                }
-
-                // 마지막 위치 데이터 갱신
-                lastLocation = locationData;
+                console.log("Received location for " + passengerNo + ": ", locationData.lat, locationData.lng);
+                
                 console.log(locationData);
                 moveMarker(locationData);
             });
@@ -71,30 +63,7 @@
     }
     
     
-    function sendLocationDataToServer() {
-        if (firstLocation && lastLocation) {
-            // 서버에 AJAX 요청 보내기
-            $.ajax({
-                url: '/callres/callEnd', // 컨트롤러 URL
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    startX: firstLocation.lng,
-                    startY: firstLocation.lat,
-                    endX: lastLocation.lng,
-                    endY: lastLocation.lat,
-                }),
-                success: function(response) {
-                    console.log('서버에 데이터 전송 성공:', response);
-                },
-                error: function(error) {
-                    console.error('서버에 데이터 전송 실패:', error);
-                }
-            });
-        } else {
-            console.error('위치 데이터가 충분하지 않습니다.');
-        }
-    }
+    
     </script>
 </body>
 </html>
