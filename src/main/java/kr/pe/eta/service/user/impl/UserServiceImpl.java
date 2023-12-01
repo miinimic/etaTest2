@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User addUser(User user) throws Exception {
-		return userDao.addUser(user);
+	public void addUser(User user) throws Exception {
+		userDao.addUser(user);
 
 	}
 
@@ -38,25 +38,33 @@ public class UserServiceImpl implements UserService {
 	public Map<String, Object> getUserList(Search search) throws Exception {
 		List<User> list = userDao.getUserList(search);
 		Map<String, Object> map = new HashMap<String, Object>();
+		int drivertotalCount = userDao.getDriverCount(search);
+		int passengertotalCount = userDao.getPassengerCount(search);
+		map.put("list", list);
+		map.put("drivertotalCount", new Integer(drivertotalCount));
+		map.put("passengertotalCount", new Integer(passengertotalCount));
+
+		System.out.println("passengertotalCount " + passengertotalCount);
+		System.out.println("drivertotalCount " + drivertotalCount);
 		map.put("list", list);
 		return map;
 	}
 
 	@Override
-	public User updateUser(User user) throws Exception {
-		return userDao.updateUser(user);
+	public void updateUser(User user) throws Exception {
+		userDao.updateUser(user);
 
 	}
 
 	@Override
-	public User updatePwd(String pwd) throws Exception {
-		return userDao.updatePwd(pwd);
+	public void updatePwd(User user) throws Exception {
+		userDao.updatePwd(user);
 
 	}
 
 	@Override
-	public User deleteUser(int userNo) throws Exception {
-		return userDao.deleteUser(userNo);
+	public void deleteUser(String eamil) throws Exception {
+		userDao.deleteUser(eamil);
 	}
 
 	@Override
@@ -93,6 +101,9 @@ public class UserServiceImpl implements UserService {
 		map.put("list", list);
 		map.put("drivertotalCount", new Integer(drivertotalCount));
 		map.put("passengertotalCount", new Integer(passengertotalCount));
+
+		System.out.println("passengertotalCount " + passengertotalCount);
+		System.out.println("drivertotalCount " + drivertotalCount);
 
 		return map;
 	}

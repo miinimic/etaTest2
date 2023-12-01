@@ -8,5 +8,6 @@
 </head>
 <body>
 <a href="/community/home.jsp">Label</a>
+<a href="/user/home.jsp">로그인</a>
 </body>
 </html>
