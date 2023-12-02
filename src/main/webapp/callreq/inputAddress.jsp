@@ -418,7 +418,7 @@ async function displayInfowindow(title, position, type) {
             sessionStorage.setItem('address', detailAddr);
             sessionStorage.setItem('type', type);
             
-            location.href ='http://localhost:8000/callreq/inputAddressMap.jsp';                       
+            location.href ='https://localhost:8000/callreq/inputAddressMap.jsp';                       
             //inputAddress.jsp
         }
     }

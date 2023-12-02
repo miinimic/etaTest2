@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,6 +73,13 @@ public class CallReqController extends Socket {
 				 * (IOException e) { e.printStackTrace(); } }
 				 */
 		}
+	}
+
+	@MessageMapping("/test")
+	@SendTo("/topic/test")
+	public String handleTestMessage(String message) {
+		System.out.println("Received message: " + message);
+		return "Received message: " + message;
 	}
 
 	@RequestMapping(value = "inputAddress", method = RequestMethod.GET)

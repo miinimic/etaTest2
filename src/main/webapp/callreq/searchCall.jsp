@@ -47,7 +47,7 @@ function deleteCall(){
 	$("form").attr("method" , "POST").attr("action" , "/callreq/deleteCall").submit();
 }
 
-let socket = new WebSocket("ws://localhost:8000/websocket");
+let socket = new WebSocket("wss://localhost:8000/websocket");
 
 socket.onopen = function (event) {
     console.log("웹 소켓 연결 성공!");
@@ -77,11 +77,8 @@ function sendMessageBack() {
 function sendMessage(callNo) {    
     
 	  console.log("push 된 callNo : "+callNo);
-
-	  // 'user01'에게 위치 데이터 전송
-	 // template.convertAndSend("/topic/location/user01", location);
   
-    socket.send(callNo);
+    socket.send("test", callNo);
 }
 
 function showButtonWithMessage(message) {

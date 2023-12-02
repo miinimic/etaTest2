@@ -32,7 +32,7 @@ function inputAddress() {
 }
 
 
-    let socket = new WebSocket("ws://localhost:8000/websocket");
+    let socket = new WebSocket("wss://localhost:8000/websocket");
 
     socket.onopen = function (event) {
         console.log("웹 소켓 연결 성공!");
