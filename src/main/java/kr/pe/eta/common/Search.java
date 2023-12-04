@@ -8,7 +8,7 @@ public class Search {
 	private int pageSize;
 	private int endRowNum;
 	private int startRowNum;
-	private boolean code;
+	private int code;
 
 	// Constructor
 	public Search() {
