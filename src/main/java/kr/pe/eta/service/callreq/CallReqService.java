@@ -22,4 +22,16 @@ public interface CallReqService {
 
 	public List<User> getCallDriverList(String carOpt, boolean petOpt) throws Exception;
 
+	public void updateDealCode(int callNo) throws Exception;
+
+	public void updateShareCode(int callNo) throws Exception;
+
+	public void updateLikeAddr(String likeAddr, int userNo, int likeNo) throws Exception;
+
+	public void updateCustomName(String likeName, int userNo) throws Exception;
+
+	public void deleteLikeAddr(int likeNo, int userNo) throws Exception;
+
+	public void deleteCustomName(int userNo) throws Exception;
+
 }
