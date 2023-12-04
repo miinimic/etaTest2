@@ -60,7 +60,7 @@ public class UserController {
 			session.setAttribute("user", db);
 		}
 
-		modelAndView.setViewName("redirect:/home.jsp");
+		modelAndView.setViewName("redirect:/user/getUser.jsp");
 		return modelAndView;
 	}
 
@@ -80,11 +80,10 @@ public class UserController {
 
 		ModelAndView model = new ModelAndView();
 
-		User newuser = userService.addUser(user);
+		userService.addUser(user);
 		session.setAttribute("user", user);
 
-		model.setViewName("redirect:/user/loginView.jsp");
-		model.addObject("user", newuser);
+		model.setViewName("forward:/user/home.jsp");
 		return model;
 
 	}
@@ -119,44 +118,38 @@ public class UserController {
 		System.out.println("/user/updateUser : POST");
 		ModelAndView model = new ModelAndView();
 
-		User newuser = userService.updateUser(user);
+		userService.updateUser(user);
 
-		int sessionNo = ((User) session.getAttribute("user")).getUserNo();
-		if (sessionNo == newuser.getUserNo()) {
-			session.setAttribute("user", newuser);
+		String sessionEmail = ((User) session.getAttribute("user")).getEmail();
+		if (sessionEmail.equals(user.getEmail())) {
+			session.setAttribute("user", user);
 		}
 
-		model.setViewName("forward:/user/updateUserView.jsp");
-		model.addObject("user", newuser);
+		model.setViewName("forward:/user/home.jsp");
 		return model;
 	}
 
 	@RequestMapping(value = "updatePwd", method = RequestMethod.GET)
-	public ModelAndView updatePwdView(@RequestParam("email") String eamil, HttpSession session) throws Exception {
-		System.out.println("/user/updatePwd : POST");
+	public ModelAndView updatePwdView(@RequestParam("email") String eamil) throws Exception {
+		System.out.println("/user/updatePwd : GET");
 		ModelAndView model = new ModelAndView();
 
 		User user = userService.getUser(eamil);
 
-		model.setViewName("forward:/user/updatePwd.jsp");
+		model.setViewName("forward:/user/updatepwd.jsp");
 		model.addObject("user", user);
 		return model;
 
 	}
 
 	@RequestMapping(value = "updatePwd", method = RequestMethod.POST)
-	public ModelAndView updatePwd(@ModelAttribute("user") User user, HttpSession session) throws Exception {
+	public ModelAndView updatePwd(@ModelAttribute("user") User user) throws Exception {
 		System.out.println("/user/updatePwd : POST");
 		ModelAndView model = new ModelAndView();
 
-		User newUser = userService.updatePwd(user.getPwd());
+		userService.updatePwd(user);
 
-		int sessionNo = ((User) session.getAttribute("user")).getUserNo();
-		if (sessionNo == user.getUserNo()) {
-			session.setAttribute("user", newUser);
-		}
-		model.setViewName("forward:/user/updatePwd.jsp");
-		model.addObject("user", newUser);
+		model.setViewName("forward:/user/home.jsp");
 		return model;
 
 	}
@@ -171,9 +164,9 @@ public class UserController {
 		return model;
 	}
 
-	@RequestMapping(value = "userList", method = RequestMethod.GET)
+	@RequestMapping(value = "listUser", method = RequestMethod.GET)
 	public ModelAndView getUserList(Search search) throws Exception {
-		System.out.println("/user/getLustUSer : POST");
+		System.out.println("/user/listUser : POST");
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
@@ -188,7 +181,9 @@ public class UserController {
 
 		System.out.println("code" + user.isBlockCode());
 		model.addObject("list", map.get("list"));
-		model.setViewName("forward:/home.jsp");
+		model.addObject("passenger", map.get("passengertotalCount"));
+		model.addObject("driver", map.get("drivertotalCount"));
+		model.setViewName("forward:/user/listUser.jsp");
 		model.addObject("search", search);
 
 		return model;
@@ -196,23 +191,30 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "deleteUserView", method = RequestMethod.GET)
-	public ModelAndView deleteUserVuew(ModelAndView model) throws Exception {
+	public ModelAndView deleteUserVuew(@RequestParam("email") String email, ModelAndView model) throws Exception {
 		System.out.println("/user/deleteUser : GET");
 
-		model.setViewName("redirect:/user/deleteView.jsp");
-		return null;
+		User user = userService.getUser(email);
+		model.setViewName("forward:/user/delete.jsp");
+		model.addObject("user", user);
+		return model;
 
 	}
 
 	@RequestMapping(value = "deleteUser", method = RequestMethod.POST)
-	public ModelAndView deleteUser(@ModelAttribute("detailPwd") int detailPwd, ModelAndView model, HttpSession session)
+	public ModelAndView deleteUser(@RequestParam("detailPwd") String detailPwd, @RequestParam("email") String email)
 			throws Exception {
 
-		System.out.println("/user/deleteUser : GET");
+		System.out.println("/user/deleteUser : POST");
 
-		User pwd = userService.deleteUser(detailPwd);
-		model.setViewName("redirect:/user/deleteView.jsp");
-		return null;
+		User user = userService.getUser(email);
+		if (user.getPwd().equals(detailPwd)) {
+			userService.deleteUser(email);
+		}
+		ModelAndView model = new ModelAndView();
+
+		model.setViewName("redirect:/home.jsp");
+		return model;
 
 	}
 }
