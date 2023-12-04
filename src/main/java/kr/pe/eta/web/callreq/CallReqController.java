@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
@@ -119,10 +120,20 @@ public class CallReqController extends Socket {
 
 		System.out.println("call : " + call);
 
-		call.setUserNo(1004);
+		call.setUserNo(1004); // test
+		call.setCallCode("N"); // test
+
+		String callCode = call.getCallCode();
 
 		callReqService.addCall(call); // addCall()
-		int callNo = callReqService.getCallNo();
+
+		int callNo = callReqService.getCallNo(); // getCallNo()
+
+		if (callCode == "D") {
+			callReqService.updateDealCode(callNo);
+		} else if (callCode == "S") {
+			callReqService.updateShareCode(callNo);
+		}
 
 		boolean petOpt = call.isPetOpt();
 		System.out.println("petOpt : " + petOpt);
@@ -149,6 +160,117 @@ public class CallReqController extends Socket {
 		callReqService.deleteCall(callNo);
 
 		return "forward:/callreq/selectOptions.jsp";
+	}
+
+	@RequestMapping(value = "likeAddress", method = RequestMethod.GET)
+	public String likeAddress(@RequestParam("userNo") int userNo, Model model) throws Exception {
+
+		System.out.println("/callreq/likeAddress");
+		System.out.println("userNo : " + userNo);
+		// userNo = "1004";
+		// Business Logic
+
+		List<Like> likeList = callReqService.getLikeList(userNo); // 즐겨찾기 리스트
+
+		// Model 과 View 연결
+		model.addAttribute("likeList", likeList);
+
+		return "forward:/callreq/likeAddrList.jsp";
+	}
+
+	@RequestMapping(value = "updateLikeAddr", method = RequestMethod.POST)
+	public String updateLikeAddr(@ModelAttribute("like") Like like, @RequestParam("userNo") int userNo, Model model)
+			throws Exception {
+
+		System.out.println("/callreq/updateHomeAddr");
+		System.out.println("like : " + like);
+		System.out.println("userNo : " + userNo);
+		// userNo = "1004";
+		// Business Logic
+
+		String likeAddr = like.getLikeAddr();
+		int likeNo = like.getLikeNo();
+
+		callReqService.updateLikeAddr(likeAddr, userNo, likeNo);
+
+		List<Like> likeList = callReqService.getLikeList(userNo); // 즐겨찾기 리스트
+
+		// Model 과 View 연결
+		model.addAttribute("likeList", likeList);
+
+		return "forward:/callreq/likeAddrList.jsp";
+	}
+
+	@RequestMapping(value = "updateLikeName", method = RequestMethod.POST)
+	public String updateLikeName(@ModelAttribute("like") Like like, @RequestParam("userNo") int userNo, Model model)
+			throws Exception {
+
+		System.out.println("/callreq/updateLikeName");
+		System.out.println("like : " + like);
+		System.out.println("userNo : " + userNo);
+		// userNo = "1004";
+		// Business Logic
+
+		String likeName = like.getLikeName();
+
+		callReqService.updateCustomName(likeName, userNo);
+
+		List<Like> likeList = callReqService.getLikeList(userNo); // 즐겨찾기 리스트
+
+		// Model 과 View 연결
+		model.addAttribute("likeList", likeList);
+
+		return "forward:/callreq/likeAddrList.jsp";
+	}
+
+	@RequestMapping(value = "deleteLikeAddr", method = RequestMethod.POST)
+	public String deleteLikeAddr(@ModelAttribute("like") Like like, @RequestParam("userNo") int userNo,
+			HttpSession session, Model model) throws Exception {
+
+		System.out.println("/callreq/deleteLikeAddr");
+		System.out.println("like : " + like);
+		System.out.println("userNo : " + userNo);
+		// userNo = "1004";
+		// Business Logic
+
+		int likeNo = like.getLikeNo();
+
+		callReqService.deleteLikeAddr(likeNo, userNo);
+
+		List<Like> likeList = callReqService.getLikeList(userNo); // 즐겨찾기 리스트
+
+		// Model 과 View 연결
+		model.addAttribute("likeList", likeList);
+
+		if (likeNo == 1000) {
+			session.removeAttribute("home");
+		} else if (likeNo == 1001) {
+			session.removeAttribute("company");
+		} else if (likeNo == 1002) {
+			session.removeAttribute("custom");
+		}
+
+		return "forward:/callreq/likeAddrList.jsp";
+	}
+
+	@RequestMapping(value = "deleteCustomName", method = RequestMethod.POST)
+	public String deleteCustomName(@ModelAttribute("like") Like like, @RequestParam("userNo") int userNo, Model model)
+			throws Exception {
+
+		System.out.println("/callreq/deleteCustomName");
+		System.out.println("like : " + like);
+		System.out.println("userNo : " + userNo);
+		// userNo = "1004";
+		// Business Logic
+
+		callReqService.deleteCustomName(userNo);
+
+		List<Like> likeList = callReqService.getLikeList(userNo); // 즐겨찾기 리스트
+
+		// Model 과 View 연결
+		model.addAttribute("likeList", likeList);
+
+		return "forward:/callreq/likeAddrList.jsp";
 	}
 
 }

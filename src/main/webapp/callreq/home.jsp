@@ -14,6 +14,11 @@
 </head>
 <body>
  <button type="button" class="inputAddress" onclick="inputAddress()">일반콜</button>
+ <br>
+  <button type="button" class="likeAddress" onclick="likeAddress()">즐겨찾기</button>
+  <br>
+   <button type="button" class="TpayList" onclick="TpayList()">Tpay 이용 내역</button>
+   <br>
  <input type="text" placeholder="도착지" class="content">
  <input type="text" placeholder="경로옵션" class="content">
  <input type="text" placeholder="가격" class="content">
@@ -26,11 +31,20 @@
 </body>
 <script>
 
+function likeAddress() {
+    
+	  self.location = "/callreq/likeAddress?userNo=1004"
+	}
+
 function inputAddress() {
     
 	self.location = "/callreq/inputAddress?userNo=1004"
 }
 
+function TpayList() {
+    
+    self.location = "/pay/TpayList?userNo=1004"
+  }
 
     let socket = new WebSocket("wss://localhost:8000/websocket");
 
