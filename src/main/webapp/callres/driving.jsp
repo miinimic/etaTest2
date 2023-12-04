@@ -1,10 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=843ae0fd7d31559bce57a18dcd82bf62&libraries=services"></script>
 	
 	<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=843ae0fd7d31559bce57a18dcd82bf62"></script>
@@ -60,54 +61,64 @@
    	      }); 
    	      polyline.setMap(map);
    	      
-   	// ¸¶Ä¿¸¦ »ı¼ºÇÏ°í Áöµµ¿¡ Ç¥½ÃÇÕ´Ï´Ù.
+   	// ë§ˆì»¤ë¥¼ ìƒì„±í•˜ê³  ì§€ë„ì— í‘œì‹œí•©ë‹ˆë‹¤.
    	    let marker = new kakao.maps.Marker({
    	        map: map,
-   	        position: linePath[0], // Æú¸®¶óÀÎÀÇ ½ÃÀÛÁ¡¿¡ ¸¶Ä¿¸¦ ¹èÄ¡ÇÕ´Ï´Ù.
+   	        position: linePath[0], // í´ë¦¬ë¼ì¸ì˜ ì‹œì‘ì ì— ë§ˆì»¤ë¥¼ ë°°ì¹˜í•©ë‹ˆë‹¤.
    	    });
    	
-   	// ¸¶Ä¿¸¦ ÀÌµ¿½ÃÅ³ ÀÎµ¦½º º¯¼ö¸¦ ÃÊ±âÈ­ÇÕ´Ï´Ù.
+   	// ë§ˆì»¤ë¥¼ ì´ë™ì‹œí‚¬ ì¸ë±ìŠ¤ ë³€ìˆ˜ë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
    	    let index = 0;
    	
-   	 // ÀÏÁ¤ ½Ã°£ °£°İÀ¸·Î ¸¶Ä¿¸¦ ÀÌµ¿½ÃÅ°´Â ÇÔ¼öÀÔ´Ï´Ù.
+   	 // ì¼ì • ì‹œê°„ ê°„ê²©ìœ¼ë¡œ ë§ˆì»¤ë¥¼ ì´ë™ì‹œí‚¤ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
    	    const moveMarker = () => {
    	        if (index < linePath.length) {
-   	            // ÇöÀç ÀÎµ¦½ºÀÇ ÁÂÇ¥·Î ¸¶Ä¿¸¦ ÀÌµ¿½ÃÅµ´Ï´Ù.
+   	            // í˜„ì¬ ì¸ë±ìŠ¤ì˜ ì¢Œí‘œë¡œ ë§ˆì»¤ë¥¼ ì´ë™ì‹œí‚µë‹ˆë‹¤.
    	            marker.setPosition(linePath[index]);
    	            map.setCenter(linePath[index]);
    	         sendLocationToServer(linePath[index]);
-	            //////////////////////////////////////////////////////////À§Ä¡º¸³»±â
+	            //////////////////////////////////////////////////////////ìœ„ì¹˜ë³´ë‚´ê¸°
   
    	            index++;
    	        } else {
-   	            // Æú¸®¶óÀÎÀÇ ³¡¿¡ µµ´ŞÇß´Ù¸é, ÀÎÅÍ¹úÀ» Áß´ÜÇÕ´Ï´Ù.
+   	            // í´ë¦¬ë¼ì¸ì˜ ëì— ë„ë‹¬í–ˆë‹¤ë©´, ì¸í„°ë²Œì„ ì¤‘ë‹¨í•©ë‹ˆë‹¤.
    	            clearInterval(intervalId);
    	        }
    	    };
 
-   	    // 1ÃÊ¸¶´Ù ¸¶Ä¿¸¦ ÀÌµ¿½ÃÅ°±â À§ÇÑ ÀÎÅÍ¹ú ¼³Á¤
+   	    // 1ì´ˆë§ˆë‹¤ ë§ˆì»¤ë¥¼ ì´ë™ì‹œí‚¤ê¸° ìœ„í•œ ì¸í„°ë²Œ ì„¤ì •
    	    const intervalId = setInterval(moveMarker, 500);
    	};
    	
-   	
-   	
-   	var stompClient = null; // Àü¿ª ½ºÄÚÇÁ¿¡¼­ stompClient ÃÊ±âÈ­
+   	var firstLocation = null;
+    var lastLocation = null;
+   	var passengerNo = "${passengerNo}";
+   	var stompClient = null; // ì „ì—­ ìŠ¤ì½”í”„ì—ì„œ stompClient ì´ˆê¸°í™”
    	function sendLocationToServer(index) {
  	    if (stompClient && stompClient.connected) {
  	        const location = index;
  	        const locationData = { lat: location.getLat(), lng: location.getLng() };
- 	        stompClient.send("/app/sendLocation", {}, JSON.stringify(locationData));
+ 	        stompClient.send("/app/sendLocation" + passengerNo, {}, JSON.stringify(locationData));
+ 	        
+ 	        
+ 	        
+ 	       if (!firstLocation) {
+               firstLocation = locationData;
+           }
+
+           // ë§ˆì§€ë§‰ ìœ„ì¹˜ ë°ì´í„° ê°±ì‹ 
+           lastLocation = locationData;
  	    } else {
  	        console.error("Websocket is not connected.");
  	    }
  	}
    	function connectWebSocket() {
- 	    var socket = new SockJS('/ws'); // '/ws'´Â ¼­¹öÀÇ À¥¼ÒÄÏ ¿¬°á URL
+ 	    var socket = new SockJS('/ws'); // '/ws'ëŠ” ì„œë²„ì˜ ì›¹ì†Œì¼“ ì—°ê²° URL
  	    stompClient = Stomp.over(socket);
 
  	    stompClient.connect({}, function (frame) {
  	    		console.log('Connected: ' + frame);
- 	    		// Ãß°¡ ±¸µ¶ ¼³Á¤
+ 	    		// ì¶”ê°€ êµ¬ë… ì„¤ì •
  	    		
  	    		socket.onclose = function () {
  	            console.log('WebSocket connection closed');
@@ -118,14 +129,48 @@
  			});
  	}
 	connectWebSocket();
+	
+	
+	
+	
+	
+	
+
+
+	function sendLocationDataToServer() {
+	    if (firstLocation && lastLocation) {
+	        // ì„œë²„ì— AJAX ìš”ì²­ ë³´ë‚´ê¸°
+	        $.ajax({
+	            url: '/callres/callEnd', // ì»¨íŠ¸ë¡¤ëŸ¬ URL
+	            method: 'POST',
+	            contentType: 'application/json',
+	            data: JSON.stringify({
+	                startX: firstLocation.lng,
+	                startY: firstLocation.lat,
+	                endX: lastLocation.lng,
+	                endY: lastLocation.lat,
+	                callNo: ${callNo}
+	            }),
+	            success: function(response) {
+	                console.log('ì„œë²„ì— ë°ì´í„° ì „ì†¡ ì„±ê³µ:', response);
+	                window.location.href = '/callres/home.jsp';//feedbackìœ¼ë¡œ ë‚˜ì¤‘ì— ë°”ê¿”ì•¼ëŒ
+	            },
+	            error: function(error) {
+	                console.error('ì„œë²„ì— ë°ì´í„° ì „ì†¡ ì‹¤íŒ¨:', error);
+	            }
+	        });
+	    } else {
+	        console.error('ìœ„ì¹˜ ë°ì´í„°ê°€ ì¶©ë¶„í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.');
+	    }
+	}
 	</script>
 </head>
 <body>
 	<div class="col-md-6">
     	<div id="map" style="width:100%;height:710px;"></div>
     </div>
-    
-
+  
+		<button onclick="sendLocationDataToServer()">ìš´í–‰ì¢…ë£Œ</button>
     
     
     
@@ -134,13 +179,15 @@
     <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=843ae0fd7d31559bce57a18dcd82bf62&libraries=services"></script>
           <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=843ae0fd7d31559bce57a18dcd82bf62"></script>
     <script>
-    var mapContainer = document.getElementById('map'), // Áöµµ¸¦ Ç¥½ÃÇÒ div 
+    var mapContainer = document.getElementById('map'), // ì§€ë„ë¥¼ í‘œì‹œí•  div 
     mapOption = { 
-        center: new kakao.maps.LatLng(37.4939072071976, 127.0143838311636), // ÁöµµÀÇ Áß½ÉÁÂÇ¥
-        level: 3 // ÁöµµÀÇ È®´ë ·¹º§
+        center: new kakao.maps.LatLng(37.4939072071976, 127.0143838311636), // ì§€ë„ì˜ ì¤‘ì‹¬ì¢Œí‘œ
+        level: 3 // ì§€ë„ì˜ í™•ëŒ€ ë ˆë²¨
     };
+  
+var map = new kakao.maps.Map(mapContainer, mapOption); // ì§€ë„ë¥¼ ìƒì„±í•©ë‹ˆë‹¤
 
-var map = new kakao.maps.Map(mapContainer, mapOption); // Áöµµ¸¦ »ı¼ºÇÕ´Ï´Ù
+
     </script>
 </body>
 </html>

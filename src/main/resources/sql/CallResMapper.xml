@@ -40,13 +40,15 @@
 	
 	<resultMap id="shareSelectMap" type="ShareReq">
     <result column="share_no" property="shareReqNo" jdbcType="NUMERIC" />
-    <result column="other_share_passenger_no" property="firstSharePassengerNo" jdbcType="NUMERIC" />
+    <result column="user_no" property="firstSharePassengerNo" jdbcType="NUMERIC" />
     <result column="call_no" property="callNo" jdbcType="NUMERIC" />
     <result column="share_count" property="firstShareCount" jdbcType="NUMERIC" />
     <result column="start_share_count" property="startShareCount" jdbcType="NUMERIC" />
     <result column="max_share_count" property="maxShareCount" jdbcType="NUMERIC" />
     <result column="share_date" property="shareDate" jdbcType="DATE" />
 	</resultMap>
+	
+	
 
 	<update id="updateEndXY" parameterType="call">
 		UPDATE call
@@ -61,7 +63,7 @@
 		WHERE call_No = #{callNo}
 	</update>
 	
-	<update id="updateMatchDriver" parameterType="call">
+	<update id="updateMatchDriver" parameterType="int">
 		UPDATE match
 		SET driver_no = #{driverNo}
 		WHERE call_No = #{callNo}
@@ -74,7 +76,7 @@
     	c.*, 
     	u.car_num,
     	u.phone,
-    	s.other_share_passenger_no
+    	s.user_no
 		FROM 
     	call c
 		JOIN 
@@ -91,7 +93,7 @@
     	SELECT * FROM call WHERE call_no = #{callNo}
 	</select>
 	
-	<select id="getUserByCallNo" parameterType="int" resultMap="userSelectMap">
+	<select id="getUserByCallNop" parameterType="int" resultMap="userSelectMap">
     	SELECT u.*
     	FROM users u
     	JOIN match m ON u.user_no = m.driver_no
@@ -99,20 +101,49 @@
     	WHERE c.call_no = #{callNo}
 	</select>
 	
-	<select id="getSharesByCallNo" parameterType="int" resultMap="shareSelectMap">
+	<select id="getSharesByCallNop" parameterType="int" resultMap="shareSelectMap">
     	SELECT *
     	FROM shares s
     	JOIN call c ON s.call_no = c.call_no
     	WHERE c.call_no = #{callNo}
 	</select>
 	
+	<select id="getUserByCallNod" parameterType="int" resultMap="userSelectMap">
+    	SELECT u.*
+		FROM call c
+		JOIN match m ON c.call_no = m.call_no
+		JOIN users u ON m.passenger_no = u.user_no 
+		WHERE c.call_no = #{callNo}
+	</select>
+	
+	<select id="getMatchByCallnod" parameterType="int" resultType="int">
+		SELECT m.passenger_no
+		FROM call c
+		JOIN match m ON c.call_no = m.call_no
+		WHERE c.call_no = #{callNo}
+	</select>
+	
+	<select id="getSharesByCallNod" parameterType="int" resultMap="shareSelectMap">
+    	SELECT s.*
+		FROM call c
+		LEFT JOIN shares s ON c.call_no = s.call_no
+		WHERE c.call_no = #{callNo}
+	</select>
+	
+	<select id="getBlacklistByCallNod" parameterType="int" resultType="int">
+		SELECT bl.blacklist_no
+		FROM call c
+		JOIN match m ON c.call_no = m.call_no
+		LEFT JOIN blacklist bl ON m.driver_no = bl.driver_no AND m.passenger_no = bl.passenger_no
+		WHERE c.call_no = #{callNo}
+	</select>
 	
 	<select id="getRecordDriver" parameterType="int" resultMap="callSelectMap">
 		SELECT 
     	c.*,
     	m.passenger_no,
     	u.phone AS passenger_phone,
-    	s.other_share_passenger_no,
+    	s.user_no,
     	bl.blacklist_no
 		FROM 
     	call c
@@ -143,7 +174,7 @@
                 OR m.call_no IN (
                     SELECT s.call_no 
                     FROM shares s 
-                    WHERE s.other_share_passenger_no = #{userNo}
+                    WHERE s.share_no = #{userNo}
                 )
             )
             <if test="search.searchCondition != null">

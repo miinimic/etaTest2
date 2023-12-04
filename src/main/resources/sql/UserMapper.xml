@@ -99,20 +99,19 @@
    </select>
     
     
- <delete id="deleteUser" parameterType="int">
+ <delete id="deleteUser" parameterType="string">
 
    DELETE FROM users
-   WHERE user_no = #{userNo}
+   WHERE email = #{email}
 
 </delete>
   
   <update id = "updatePwd" parameterType="user">
     UPDATE users
     <set>
-      user_no = #{userNo}
+      pwd = #{pwd}
     </set>
-  
-    WHERE user_no = #{userNo}
+    WHERE email = #{email}
   </update>
   
       <select id="getNickName" parameterType="string"  resultMap="userSelectMap">
