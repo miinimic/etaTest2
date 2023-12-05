@@ -6,8 +6,35 @@
 
 <mapper namespace="kr.pe.eta.service.pay.PayDao">
 
+  <resultMap type="Pay" id="paySelectMap">
+      <result property="callNo"   column="CALL_NO"      jdbcType="NUMERIC"/>
+      <result property="payType"   column="PAY_TYPE"      jdbcType="VARCHAR"/>
+      <result property="payDate"     column="PAY_DATE"     jdbcType="DATE"/>
+      <result property="money"     column="MONEY"     jdbcType="NUMERIC"/>
+  </resultMap>
+
   <select id="getMyMoney" parameterType="int" resultType="int">
        SELECT my_money FROM users WHERE user_no=#{userNo:NUMERIC}
   </select>
 
+   <insert  id="addCharge"    parameterType="map" >
+             
+      INSERT INTO pay (pay_no, user_no, call_no, pay_type, pay_date, money, role) 
+      VALUES (seq_pay_pay_no.NEXTVAL, #{userNo:NUMERIC}, null, '충전', SYSDATE, #{Tpay:NUMERIC}, 'passenger')
+
+   </insert>
+   
+   <update id="updateMyMoney" parameterType="map">
+    UPDATE users SET my_money = #{updateMyMoney:NUMERIC} WHERE user_no =  #{userNo:NUMERIC}
+   </update>
+   
+     <select id="getTpayList" parameterType="int" resultMap="paySelectMap">
+       SELECT call_no, pay_type, pay_date, money FROM pay WHERE user_no =  #{userNo:NUMERIC}
+  </select>
+  
+     <insert  id="addPay"    parameterType="Pay" >            
+      INSERT INTO pay (pay_no, user_no, call_no, pay_type, pay_date, money, role) 
+      VALUES (seq_pay_pay_no.NEXTVAL, #{userNo:NUMERIC}, #{callNo:NUMERIC}, #{payType:VARCHAR}, SYSDATE, #{money:NUMERIC}, 'passenger')
+
+   </insert>
 </mapper>
